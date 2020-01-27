@@ -3,7 +3,7 @@ let CityAlert = require("./city-alerts");
 
 //const ACCUWEATHER_API_KEY = "VXKNIrJxoGufQcmyeZm3lk3gm7FZAG5i";
 const ACCUWEATHER_API_KEY = "6ac6lHqSLbmW7RePsn7KC456OWzQEM9R";
-const accuweather_base_url = "http://dataservice.accuweather.com/";
+const ACCUWEATHER_BASE_URL = "http://dataservice.accuweather.com/";
 
 const BIG_PANDA_APP_KEY = "c4dd158bafc95a4c2c3a22065a888eac";
 const BIG_PANDA_AUTH_TOKEN = "504c92e6d59f9deda21869cb4ca1cd72";
@@ -11,7 +11,7 @@ const BIG_PANDA_BASE_URL = "https://api.bigpanda.io/data/v2/alerts";
 
 function fetchData(url) {
   // return new Promise(resolve, reject) {
-    let requestUrl = url + "currentconditions/v1/topcities/100?" + `apikey=${ACCUWEATHER_API_KEY}`;
+    let requestUrl = url + "currentconditions/v1/topcities/50?" + `apikey=${ACCUWEATHER_API_KEY}`;
     request(requestUrl)
       .then(function(body) {
         let data = JSON.parse(body);
@@ -60,4 +60,4 @@ function pandasRequest(pandasRequestBody) {
   return request(options);
 }
 
-fetchData(accuweather_base_url);
+fetchData(ACCUWEATHER_BASE_URL);

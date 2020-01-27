@@ -10,6 +10,7 @@ function CityAlert(city) {
   this.timestamp = city["EpochTime"];
   this.description = city["WeatherText"];
   this.locationId = city["Key"];
+  this.link = city["Link"]
 }
 
 CityAlert.prototype = {
@@ -20,6 +21,7 @@ CityAlert.prototype = {
     } else {
       this._status = "warning";
     }
+    //this._status = "ok"
   },
 
   get status() {
@@ -50,6 +52,14 @@ CityAlert.prototype = {
     return this._locationId;
   },
 
+  set link(key) {
+    this._link = key;
+  },
+
+  get link() {
+    return this._link;
+  },
+
   get host() {
     return this._host;
   },
@@ -64,7 +74,8 @@ CityAlert.prototype = {
       "host": this._host,
       "description": this._description,
       "timestamp": this._timestamp,
-      "locationId": this._locationId
+      "locationId": this._locationId,
+      "link": this._link
     }
   },
 
