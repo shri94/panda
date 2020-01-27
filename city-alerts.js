@@ -1,20 +1,15 @@
 let request = require("request-promise");
 
-const BIG_PANDA_APP_KEY = "c4dd158bafc95a4c2c3a22065a888eac";
-const BIG_PANDA_AUTH_TOKEN = "504c92e6d59f9deda21869cb4ca1cd72";
-const BIG_PANDA_BASE_URL = "https://api.bigpanda.io/data/v2/alerts";
-
 function CityAlert(city) {
   this.status = city["Temperature"]["Metric"]["Value"];
-  this.host = city["EnglishName"];
   this.timestamp = city["EpochTime"];
   this.description = city["WeatherText"];
   this.locationId = city["Key"];
-  this.link = city["Link"]
+  this.host = city["Link"]
+  this.cityName = city["EnglishName"]
 }
 
 CityAlert.prototype = {
-  appKey: BIG_PANDA_APP_KEY,
   set status(temperature) {
     if (temperature <= -10 || temperature >= 45) {
       this._status = "critical";
@@ -52,14 +47,6 @@ CityAlert.prototype = {
     return this._locationId;
   },
 
-  set link(key) {
-    this._link = key;
-  },
-
-  get link() {
-    return this._link;
-  },
-
   get host() {
     return this._host;
   },
@@ -68,6 +55,15 @@ CityAlert.prototype = {
     this._host = host;
   },
 
+  get cityName() {
+    return this._cityName;
+  },
+
+  set cityName(name) {
+    this._cityName = name;
+  },
+
+
   toJSON: function() {
     return {
       "status": this._status,
@@ -75,25 +71,12 @@ CityAlert.prototype = {
       "description": this._description,
       "timestamp": this._timestamp,
       "locationId": this._locationId,
-      "link": this._link
+      "cityName": this._cityName
     }
   },
 
   toString: function() {
     return JSON.stringify(this.toJSON());
-  },
-
-  pushAlertToBigPanda: function() {
-    let options = {
-      method: 'POST',
-      uri: BIG_PANDA_BASE_URL,
-      headers: {
-        "Authorization": `Bearer ${BIG_PANDA_AUTH_TOKEN}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(this.toJSON()),
-    }
-    return request(options);
   }
 
 }
