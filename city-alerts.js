@@ -6,23 +6,20 @@ const BIG_PANDA_BASE_URL = "https://api.bigpanda.io/data/v2/alerts";
 
 function CityAlert(city) {
   this.status = city["Temperature"]["Metric"]["Value"];
-  this.host = city["Link"];
+  this.host = city["EnglishName"];
   this.timestamp = city["EpochTime"];
   this.description = city["WeatherText"];
-  this.additionalAttributes = city;
+  this.locationId = city["Key"];
 }
 
 CityAlert.prototype = {
   appKey: BIG_PANDA_APP_KEY,
   set status(temperature) {
-    // if (temperature <= -10 || temperature >= 45) {
-    //   this._status = "critical";
-    // } else if ((temperature > -10 && temperature <=0) || (temperature >=35 && temperature < 45)) {
-    //   this._status = "warning";
-    // } else {
-    //   this._status = "ok";
-    // }
-    this._status = "critical"
+    if (temperature <= -10 || temperature >= 45) {
+      this._status = "critical";
+    } else {
+      this._status = "warning";
+    }
   },
 
   get status() {
@@ -45,12 +42,12 @@ CityAlert.prototype = {
     return this._description;
   },
 
-  set additionalAttributes(payload) {
-    this._additionalAttributes = payload;
+  set locationId(key) {
+    this._locationId = key;
   },
 
-  get additionalAttributes() {
-    return this._additionalAttributes;
+  get locationId() {
+    return this._locationId;
   },
 
   get host() {
@@ -63,12 +60,11 @@ CityAlert.prototype = {
 
   toJSON: function() {
     return {
-      // "app_key": this.appKey,
       "status": this._status,
-      "host": "AccuweatherAlerts",
+      "host": this._host,
       "description": this._description,
-      "timestamp": this._timestamp
-      // "additional_attributes": this._additionalAttributes,
+      "timestamp": this._timestamp,
+      "locationId": this._locationId
     }
   },
 
