@@ -15,13 +15,14 @@ function CityAlert(city) {
 CityAlert.prototype = {
   appKey: BIG_PANDA_APP_KEY,
   set status(temperature) {
-    if (temperature <= -10 || temperature >= 45) {
-      this._status = "critical";
-    } else if ((temperature > -10 && temperature <=0) || (temperature >=35 && temperature < 45)) {
-      this._status = "warning";
-    } else {
-      this._status = "ok";
-    }
+    // if (temperature <= -10 || temperature >= 45) {
+    //   this._status = "critical";
+    // } else if ((temperature > -10 && temperature <=0) || (temperature >=35 && temperature < 45)) {
+    //   this._status = "warning";
+    // } else {
+    //   this._status = "ok";
+    // }
+    this._status = "critical"
   },
 
   get status() {
@@ -62,12 +63,12 @@ CityAlert.prototype = {
 
   toJSON: function() {
     return {
-      status: this._status,
-      host: this._host,
-      description: this._description,
-      timestamp: this._timestamp,
-      "Additional attributes": this._additionalAttributes,
-      app_key: this.appKey
+      // "app_key": this.appKey,
+      "status": this._status,
+      "host": "AccuweatherAlerts",
+      "description": this._description,
+      "timestamp": this._timestamp
+      // "additional_attributes": this._additionalAttributes,
     }
   },
 
@@ -83,8 +84,7 @@ CityAlert.prototype = {
         "Authorization": `Bearer ${BIG_PANDA_AUTH_TOKEN}`,
         "Content-Type": "application/json"
       },
-      body: this.toJSON(),
-      json: true // Automatically stringifies the body to JSON
+      body: JSON.stringify(this.toJSON()),
     }
     return request(options);
   }
